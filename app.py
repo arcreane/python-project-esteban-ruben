@@ -3,7 +3,7 @@ import sys
 from PySide6 import QtUiTools
 from PySide6.QtWidgets import QApplication, QMainWindow, QMessageBox, QPushButton
 from PySide6.QtUiTools import QUiLoader
-from PySide6.QtCore import QFile, QIODevice, Slot
+from PySide6.QtCore import QFile, QIODev
 
 
 class MainWindow(QMainWindow):
