@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import QMainWindow, QApplication, QGraphicsScene, QGraphicsEllipseItem, QGraphicsTextItem
 from PySide6.QtCore import QTimer, Slot, QPointF
 from PySide6.QtUiTools import QUiLoader
-from Avion import Avion
+from Avions import Avion
 import sys
 import random
 
