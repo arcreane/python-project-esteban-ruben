@@ -6,19 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1082</width>
+    <width>1000</width>
     <height>700</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Contrôle Aérien - Simulateur</string>
+   <string>Contrôle Aérien - Interface DENSE</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
      <widget class="QSplitter" name="mainSplitter">
       <property name="orientation">
-       <enum>Qt::Orientation::Horizontal</enum>
+       <enum>Qt::Horizontal</enum>
       </property>
       <property name="handleWidth">
        <number>10</number>
@@ -52,10 +52,10 @@
            </sizepolicy>
           </property>
           <property name="frameShape">
-           <enum>QFrame::Shape::StyledPanel</enum>
+           <enum>QFrame::StyledPanel</enum>
           </property>
           <property name="frameShadow">
-           <enum>QFrame::Shadow::Sunken</enum>
+           <enum>QFrame::Sunken</enum>
           </property>
           <property name="lineWidth">
            <number>1</number>
@@ -75,7 +75,7 @@
           </property>
           <layout class="QFormLayout" name="formLayout_info">
            <property name="fieldGrowthPolicy">
-            <enum>QFormLayout::FieldGrowthPolicy::AllNonFixedFieldsGrow</enum>
+            <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
            </property>
            <item row="0" column="0">
             <widget class="QLabel" name="label_airplane_name">
@@ -88,6 +88,7 @@
             <widget class="QLabel" name="value_airplane_name">
              <property name="font">
               <font>
+               <weight>75</weight>
                <bold>true</bold>
               </font>
              </property>
@@ -107,6 +108,7 @@
             <widget class="QLabel" name="value_altitude">
              <property name="font">
               <font>
+               <weight>75</weight>
                <bold>true</bold>
               </font>
              </property>
@@ -129,6 +131,7 @@
             <widget class="QLabel" name="value_speed">
              <property name="font">
               <font>
+               <weight>75</weight>
                <bold>true</bold>
               </font>
              </property>
@@ -176,19 +179,25 @@
         <item>
          <widget class="QGroupBox" name="controlsGroup">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
             <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
+            <verstretch>1</verstretch>
            </sizepolicy>
           </property>
           <property name="title">
            <string>⬆️ Contrôles (Actions)</string>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_controls">
+           <property name="spacing">
+            <number>5</number>
+           </property>
            <item>
             <widget class="QPushButton" name="button_climb">
-             <property name="toolTip">
-              <string>Augmenter l'altitude de l'avion sélectionné.</string>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>1</verstretch>
+              </sizepolicy>
              </property>
              <property name="text">
               <string>Monter (Climb)</string>
@@ -197,8 +206,11 @@
            </item>
            <item>
             <widget class="QPushButton" name="button_descend">
-             <property name="toolTip">
-              <string>Diminuer l'altitude de l'avion sélectionné.</string>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>1</verstretch>
+              </sizepolicy>
              </property>
              <property name="text">
               <string>Descendre (Descend)</string>
@@ -207,8 +219,11 @@
            </item>
            <item>
             <widget class="QPushButton" name="button_land">
-             <property name="toolTip">
-              <string>Donner l'autorisation d'atterrissage.</string>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>1</verstretch>
+              </sizepolicy>
              </property>
              <property name="text">
               <string>Atterrir (Land)</string>
@@ -217,8 +232,11 @@
            </item>
            <item>
             <widget class="QPushButton" name="button_hold">
-             <property name="toolTip">
-              <string>Placer l'avion en circuit d'attente.</string>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>1</verstretch>
+              </sizepolicy>
              </property>
              <property name="text">
               <string>Attendre (Hold)</string>
@@ -241,72 +259,153 @@
           </property>
           <layout class="QFormLayout" name="formLayout_stats">
            <property name="fieldGrowthPolicy">
-            <enum>QFormLayout::FieldGrowthPolicy::AllNonFixedFieldsGrow</enum>
+            <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+           </property>
+           <property name="labelAlignment">
+            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+           </property>
+           <property name="formAlignment">
+            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+           </property>
+           <property name="rowWrapPolicy">
+            <enum>QFormLayout::DontWrapRows</enum>
            </property>
            <item row="0" column="0">
             <widget class="QLabel" name="stat_label_score">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>1</verstretch>
+              </sizepolicy>
+             </property>
              <property name="text">
               <string>Score Actuel:</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
              </property>
             </widget>
            </item>
            <item row="0" column="1">
             <widget class="QLabel" name="stat_value_score">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>1</verstretch>
+              </sizepolicy>
+             </property>
              <property name="font">
               <font>
                <pointsize>10</pointsize>
+               <weight>75</weight>
                <bold>true</bold>
               </font>
              </property>
              <property name="text">
               <string>1250</string>
              </property>
+             <property name="alignment">
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             </property>
             </widget>
            </item>
            <item row="1" column="0">
             <widget class="QLabel" name="stat_label_time">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>1</verstretch>
+              </sizepolicy>
+             </property>
              <property name="text">
               <string>Temps Écoulé:</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
              </property>
             </widget>
            </item>
            <item row="1" column="1">
             <widget class="QLabel" name="stat_value_time">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>1</verstretch>
+              </sizepolicy>
+             </property>
              <property name="font">
               <font>
+               <weight>75</weight>
                <bold>true</bold>
               </font>
              </property>
              <property name="text">
               <string>05:45</string>
              </property>
+             <property name="alignment">
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             </property>
             </widget>
            </item>
            <item row="2" column="0">
             <widget class="QLabel" name="stat_label_landed">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>1</verstretch>
+              </sizepolicy>
+             </property>
              <property name="text">
               <string>Avions Atterris:</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
              </property>
             </widget>
            </item>
            <item row="2" column="1">
             <widget class="QLabel" name="stat_value_landed">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>1</verstretch>
+              </sizepolicy>
+             </property>
              <property name="text">
               <string>12</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
              </property>
             </widget>
            </item>
            <item row="3" column="0">
             <widget class="QLabel" name="stat_label_lives">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>1</verstretch>
+              </sizepolicy>
+             </property>
              <property name="text">
               <string>Vies Restantes:</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
              </property>
             </widget>
            </item>
            <item row="3" column="1">
             <widget class="QLabel" name="stat_value_lives">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>1</verstretch>
+              </sizepolicy>
+             </property>
              <property name="font">
               <font>
+               <weight>75</weight>
                <bold>true</bold>
               </font>
              </property>
@@ -315,6 +414,9 @@
              </property>
              <property name="text">
               <string>3</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
              </property>
             </widget>
            </item>
@@ -329,6 +431,13 @@
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QGraphicsView</class>
+   <extends>QAbstractScrollArea</extends>
+   <header>qgraphicsview.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
