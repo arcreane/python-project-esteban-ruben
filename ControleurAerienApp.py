@@ -6,10 +6,14 @@ import sys
 import random
 
 class ControleurAerienApp(QMainWindow):
+
+
     def __init__(self, ui_file):
         super().__init__()
         loader = QUiLoader()
-        self.ui = loader.load(ui_file, self)
+        a_widget = loader.load(ui_file, self)
+        self.setCentralWidget(a_widget)
+        self.ui = a_widget
         self.avions = []
         self.score = 0
         self.temps_simulation = 0
@@ -22,8 +26,8 @@ class ControleurAerienApp(QMainWindow):
         self.timer_spawn = QTimer(self)
         self.timer_spawn.timeout.connect(self.creer_nouvel_avion)
         self.timer_spawn.start(5000)
-        self.ui.button_climb.clicked.connect(lambda: self.changer_altitude_selectionne(100))
-        self.ui.button_descend.clicked.connect(lambda: self.changer_altitude_selectionne(-100))
+        self.ui.button_climb.clicked.connect(lambda: self.changer_altitude_selectionne(1))
+        self.ui.button_descend.clicked.connect(lambda: self.changer_altitude_selectionne(-1))
         self.ui.button_land.clicked.connect(self.demander_atterrissage_selectionne)
         self.creer_nouvel_avion()
         self.creer_nouvel_avion()
@@ -33,7 +37,7 @@ class ControleurAerienApp(QMainWindow):
         identifiant = f"{random.choice(['AF', 'LH', 'BA'])}{random.randint(1000, 9999)}"
         x = random.randint(50, 450)
         y = random.randint(50, 450)
-        altitude = random.randint(2000, 5000)
+        altitude = random.randint(1, 3)
         vitesse = random.randint(300, 500)
         cap = random.randint(0, 360)
         carburant = random.randint(60, 100)
@@ -55,7 +59,6 @@ class ControleurAerienApp(QMainWindow):
         taille = 10
         avion_item = QGraphicsEllipseItem(avion.x, avion.y, taille, taille)
         couleur = "red" if avion.est_en_urgence else "green" if avion.atterrissage_demande else "blue"
-        #avion_item.setBrush(QColor(couleur))
         self.scene.addItem(avion_item)
         info_item = QGraphicsTextItem(avion.identifiant)
         info_item.setPos(avion.x + taille, avion.y - taille)
@@ -68,12 +71,12 @@ class ControleurAerienApp(QMainWindow):
                 self.score -= 500
 
     def mettre_a_jour_interface(self):
-        self.ui.stat_label_score.setText(f"{self.score}")
-        self.ui.stat_label_landed.setText(f"{len(self.avions)}")
-        liste_avions_texte = "\n".join([avion.get_info_texte() for avion in self.avions])
-        self.ui.text_avions.setText(liste_avions_texte)
+        self.ui.stat_value_score.setText(f"{self.score}")
+        self.ui.stat_value_landed.setText(f"{len(self.avions)}")
+        '''liste_avions_texte = "\n".join([avion.get_info_texte() for avion in self.avions])
+        self.ui.text_avions.setText(liste_avions_texte)'''
         if self.avion_selectionne:
-            self.ui.label_selectionne.setText(self.avion_selectionne.identifiant)
+            self.ui.value_airplane_name.setText(self.avion_selectionne.identifiant)
 
     def selectionner_avion(self, identifiant):
         self.avion_selectionne = next((a for a in self.avions if a.identifiant == identifiant), None)
