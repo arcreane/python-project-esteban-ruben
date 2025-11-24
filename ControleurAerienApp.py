@@ -22,10 +22,9 @@ class ControleurAerienApp(QMainWindow):
         self.timer_spawn = QTimer(self)
         self.timer_spawn.timeout.connect(self.creer_nouvel_avion)
         self.timer_spawn.start(5000)
-        self.ui.bouton_cap.clicked.connect(self.changer_cap_selectionne)
-        self.ui.bouton_monter.clicked.connect(lambda: self.changer_altitude_selectionne(100))
-        self.ui.bouton_descendre.clicked.connect(lambda: self.changer_altitude_selectionne(-100))
-        self.ui.bouton_atterrir.clicked.connect(self.demander_atterrissage_selectionne)
+        self.ui.button_climb.clicked.connect(lambda: self.changer_altitude_selectionne(100))
+        self.ui.button_descend.clicked.connect(lambda: self.changer_altitude_selectionne(-100))
+        self.ui.button_land.clicked.connect(self.demander_atterrissage_selectionne)
         self.creer_nouvel_avion()
         self.creer_nouvel_avion()
 
@@ -56,7 +55,7 @@ class ControleurAerienApp(QMainWindow):
         taille = 10
         avion_item = QGraphicsEllipseItem(avion.x, avion.y, taille, taille)
         couleur = "red" if avion.est_en_urgence else "green" if avion.atterrissage_demande else "blue"
-        avion_item.setBrush(QColor(couleur))
+        #avion_item.setBrush(QColor(couleur))
         self.scene.addItem(avion_item)
         info_item = QGraphicsTextItem(avion.identifiant)
         info_item.setPos(avion.x + taille, avion.y - taille)
@@ -69,8 +68,8 @@ class ControleurAerienApp(QMainWindow):
                 self.score -= 500
 
     def mettre_a_jour_interface(self):
-        self.ui.label_score.setText(f"{self.score}")
-        self.ui.label_avions.setText(f"{len(self.avions)}")
+        self.ui.stat_label_score.setText(f"{self.score}")
+        self.ui.stat_label_landed.setText(f"{len(self.avions)}")
         liste_avions_texte = "\n".join([avion.get_info_texte() for avion in self.avions])
         self.ui.text_avions.setText(liste_avions_texte)
         if self.avion_selectionne:
@@ -78,16 +77,6 @@ class ControleurAerienApp(QMainWindow):
 
     def selectionner_avion(self, identifiant):
         self.avion_selectionne = next((a for a in self.avions if a.identifiant == identifiant), None)
-
-    @Slot()
-    def changer_cap_selectionne(self):
-        if self.avion_selectionne:
-            nouveau_cap_str = self.ui.input_cap.text()
-            try:
-                nouveau_cap = int(nouveau_cap_str)
-                self.avion_selectionne.changer_cap(nouveau_cap)
-            except ValueError:
-                pass
 
     @Slot()
     def changer_altitude_selectionne(self, delta):

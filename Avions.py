@@ -31,9 +31,6 @@ class Avion:
 
         return distance_2d < Avion.COLLISION_DISTANCE
 
-    def changer_cap(self, nouveau_cap):
-        self.cap = nouveau_cap % 360
-
     def changer_altitude(self, delta_altitude):
         self.altitude += delta_altitude
         self.altitude = max(0, self.altitude)
