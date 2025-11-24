@@ -2,7 +2,7 @@ from PySide6.QtWidgets import QApplication
 from ControleurAerienApp import ControleurAerienApp
 import sys
 
-UI_FILE_NAME = "mainwindow.ui"
+UI_FILE_NAME = "mainwindow (1).ui"
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
