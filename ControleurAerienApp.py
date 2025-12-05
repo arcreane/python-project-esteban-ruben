@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QMainWindow, QApplication, QGraphicsScene, QGraphicsEllipseItem, QGraphicsTextItem
 from PySide6.QtCore import QTimer, Slot, QPointF
-from PySide6.QtUiTools import QUiLoader
+from PySide6.QtUiTools import QUiLoader, loadUiType
 from Avions import Avion
 import sys
 import random
@@ -11,9 +11,8 @@ class ControleurAerienApp(QMainWindow):
     def __init__(self, ui_file):
         super().__init__()
         loader = QUiLoader()
-        a_widget = loader.load(ui_file, self)
-        self.setCentralWidget(a_widget)
-        self.ui = a_widget
+        loader.registerCustomWidget(ControleurAerienApp)
+        self.ui = loader.load(ui_file, self)
         self.avions = []
         self.score = 0
         self.temps_simulation = 0

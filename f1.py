@@ -7,7 +7,9 @@ app = QApplication(sys.argv)
 
 loader = QUiLoader()
 file = QFile("mainwindow (1).ui")
-file.open(QFile.OpenModeFlag.ReadOnly)
+
+'''window = loader.load(file)
+window.show()'''
 
 fenetre_principale = ControleurAerienApp(file)
 fenetre_principale.show()
