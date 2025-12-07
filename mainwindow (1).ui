@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>MainWindow</class>
- <widget class="QMainWindow" name="ControleurAerienApp">
+ <widget class="QMainWindow" name="MainWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,7 +11,39 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Contrôle Aérien - Interface DENSE</string>
+   <string>Contrôle Aérien - Tableau de Bord Coloré</string>
+  </property>
+  <property name="styleSheet">
+   <string>/* Style général (Dark Mode) */
+QMainWindow {
+    background-color: #2e2e2e;
+}
+QWidget#centralwidget {
+    background-color: #2e2e2e;
+}
+QGroupBox {
+    border: 2px solid #5a5a5a;
+    border-radius: 5px;
+    margin-top: 1ex;
+    font-weight: bold;
+    color: #ffffff; /* Texte du titre en blanc */
+}
+QGroupBox::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top center;
+    padding: 0 3px;
+    background-color: #2e2e2e;
+}
+QLabel {
+    color: #cccccc; /* Texte général des labels */
+}
+QGraphicsView {
+    background-color: #DEDEDE; /* Fond de la carte ou vue graphique */
+    border: 1px solid #5a5a5a;
+}
+QSplitter::handle {
+    background-color: #5a5a5a;
+}</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
@@ -92,6 +124,9 @@
                <bold>true</bold>
               </font>
              </property>
+             <property name="styleSheet">
+              <string>color: #FFD700;</string>
+             </property>
              <property name="text">
               <string>Vol AFR123</string>
              </property>
@@ -113,7 +148,7 @@
               </font>
              </property>
              <property name="styleSheet">
-              <string>color: blue;</string>
+              <string>color: #4CAF50;</string>
              </property>
              <property name="text">
               <string>15,000</string>
@@ -135,6 +170,9 @@
                <bold>true</bold>
               </font>
              </property>
+             <property name="styleSheet">
+              <string>color: #2196F3;</string>
+             </property>
              <property name="text">
               <string>250</string>
              </property>
@@ -149,6 +187,9 @@
            </item>
            <item row="3" column="1">
             <widget class="QLabel" name="value_fuel">
+             <property name="styleSheet">
+              <string>color: #FFC107;</string>
+             </property>
              <property name="text">
               <string>85%</string>
              </property>
@@ -199,6 +240,10 @@
                <verstretch>1</verstretch>
               </sizepolicy>
              </property>
+             <property name="styleSheet">
+              <string>QPushButton { background-color: #4CAF50; color: white; border: 1px solid #388E3C; }
+QPushButton:hover { background-color: #66BB6A; }</string>
+             </property>
              <property name="text">
               <string>Monter (Climb)</string>
              </property>
@@ -211,6 +256,10 @@
                <horstretch>0</horstretch>
                <verstretch>1</verstretch>
               </sizepolicy>
+             </property>
+             <property name="styleSheet">
+              <string>QPushButton { background-color: #2196F3; color: white; border: 1px solid #1976D2; }
+QPushButton:hover { background-color: #42A5F5; }</string>
              </property>
              <property name="text">
               <string>Descendre (Descend)</string>
@@ -225,6 +274,10 @@
                <verstretch>1</verstretch>
               </sizepolicy>
              </property>
+             <property name="styleSheet">
+              <string>QPushButton { background-color: #FF9800; color: black; border: 1px solid #F57C00; }
+QPushButton:hover { background-color: #FFB74D; }</string>
+             </property>
              <property name="text">
               <string>Atterrir (Land)</string>
              </property>
@@ -237,6 +290,10 @@
                <horstretch>0</horstretch>
                <verstretch>1</verstretch>
               </sizepolicy>
+             </property>
+             <property name="styleSheet">
+              <string>QPushButton { background-color: #795548; color: white; border: 1px solid #5D4037; }
+QPushButton:hover { background-color: #A1887F; }</string>
              </property>
              <property name="text">
               <string>Attendre (Hold)</string>
@@ -270,6 +327,15 @@
            <property name="rowWrapPolicy">
             <enum>QFormLayout::DontWrapRows</enum>
            </property>
+           <property name="horizontalSpacing">
+            <number>30</number>
+           </property>
+           <property name="labelSretch">
+            <number>1</number>
+           </property>
+           <property name="fieldStretch">
+            <number>2</number>
+           </property>
            <item row="0" column="0">
             <widget class="QLabel" name="stat_label_score">
              <property name="sizePolicy">
@@ -300,6 +366,9 @@
                <weight>75</weight>
                <bold>true</bold>
               </font>
+             </property>
+             <property name="styleSheet">
+              <string>color: #FFEB3B;</string>
              </property>
              <property name="text">
               <string>1250</string>
@@ -339,6 +408,9 @@
                <bold>true</bold>
               </font>
              </property>
+             <property name="styleSheet">
+              <string>color: #00BCD4;</string>
+             </property>
              <property name="text">
               <string>05:45</string>
              </property>
@@ -370,6 +442,9 @@
                <horstretch>0</horstretch>
                <verstretch>1</verstretch>
               </sizepolicy>
+             </property>
+             <property name="styleSheet">
+              <string>color: #8BC34A;</string>
              </property>
              <property name="text">
               <string>12</string>
@@ -410,7 +485,7 @@
               </font>
              </property>
              <property name="styleSheet">
-              <string>color: red;</string>
+              <string>color: #F44336; /* Rouge pour les vies restantes (critique) */</string>
              </property>
              <property name="text">
               <string>3</string>
