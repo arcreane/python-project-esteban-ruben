@@ -13,3 +13,4 @@ window = loader.load(file)
 window.show()
 
 sys.exit(app.exec())
+
