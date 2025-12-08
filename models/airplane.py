@@ -12,21 +12,21 @@ class AirplaneState(Enum):
 
 
 class Airplane:
-    # Constantes de classe - Système de niveaux
-    LEVEL_1 = 1  # Niveau bas (requis pour atterrir)
-    LEVEL_2 = 2  # Niveau moyen
-    LEVEL_3 = 3  # Niveau haut
+
+    LEVEL_1 = 1
+    LEVEL_2 = 2
+    LEVEL_3 = 3
     MIN_LEVEL = 1
     MAX_LEVEL = 3
     
-    MIN_SPEED = 150  # kts
-    MAX_SPEED = 500  # kts
-    FUEL_CONSUMPTION_RATE = 1.43  # % par seconde (100% en ~70 secondes)
-    CRITICAL_FUEL_LEVEL = 15  # %
-    COLLISION_DISTANCE = 30  # pixels (réduit pour plus de challenge)
-    SAFE_DISTANCE = 80  # pixels (zone d'alerte)
+    MIN_SPEED = 150
+    MAX_SPEED = 500
+    FUEL_CONSUMPTION_RATE = 1.43
+    CRITICAL_FUEL_LEVEL = 15
+    COLLISION_DISTANCE = 30
+    SAFE_DISTANCE = 80
     
-    _airplane_counter = 0  # Compteur pour générer des IDs uniques
+    _airplane_counter = 0
     
     def __init__(self, name=None, x=0, y=0, level=3, speed=250, heading=0, fuel=100):
         Airplane._airplane_counter += 1
@@ -34,7 +34,7 @@ class Airplane:
         self.name = name or self._generate_name()
         self.x = x
         self.y = y
-        self.level = max(self.MIN_LEVEL, min(self.MAX_LEVEL, level))  # Niveau 1, 2 ou 3
+        self.level = max(self.MIN_LEVEL, min(self.MAX_LEVEL, level))
         self.speed = speed
         self.heading = heading
         self.fuel = fuel
@@ -64,9 +64,9 @@ class Airplane:
             self.state = AirplaneState.LANDED
             return
         
-        # Mise à jour de la position
+
         if self.state != AirplaneState.HOLDING:
-            # Si en mode atterrissage, se diriger vers la zone
+
             if self.state == AirplaneState.LANDING and self.landing_target_x is not None:
                 dx = self.landing_target_x - self.x
                 dy = self.landing_target_y - self.y
@@ -114,7 +114,7 @@ class Airplane:
         if self.state == AirplaneState.HOLDING:
             self.state = AirplaneState.FLYING
         else:
-            # Mettre en attente
+
             self.state = AirplaneState.HOLDING
     
     def change_heading(self, new_heading):
@@ -135,7 +135,7 @@ class Airplane:
         return math.sqrt(dx*dx + dy*dy)
     
     def is_too_close(self, other):
-        if self.level != other.level:  # Niveaux différents = sûr
+        if self.level != other.level:
             return False
         return self.distance_to(other) < self.COLLISION_DISTANCE
     

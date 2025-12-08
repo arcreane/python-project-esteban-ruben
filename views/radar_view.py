@@ -49,17 +49,17 @@ class AirplaneGraphicsItem(QGraphicsPolygonItem):
                     break
         
         if airplane.is_in_danger():
-            color = QColor(244, 67, 54)  # Rouge (urgence carburant)
+            color = QColor(244, 67, 54)
         elif is_in_danger_zone:
             color = QColor(255, 87, 34)
         elif airplane.state == AirplaneState.LANDING:
-            color = QColor(255, 152, 0)  # Orange (atterrissage)
+            color = QColor(255, 152, 0)
         elif airplane.state == AirplaneState.HOLDING:
-            color = QColor(121, 85, 72)  # Marron (attente)
+            color = QColor(121, 85, 72)
         elif airplane.selected:
-            color = QColor(255, 215, 0)  # Or (sélectionné)
+            color = QColor(255, 215, 0)
         else:
-            color = QColor(33, 150, 243)  # Bleu (normal)
+            color = QColor(33, 150, 243)
         
         self.setBrush(QBrush(color))
         
@@ -98,7 +98,7 @@ class RadarScene(QGraphicsScene):
         y = self.game_manager.landing_zone_y
         radius = self.game_manager.landing_zone_radius
         
-        # Cercle extérieur (zone d'atterrissage)
+
         landing_circle = QGraphicsEllipseItem(
             x - radius, y - radius, 
             radius * 2, radius * 2
