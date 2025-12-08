@@ -54,15 +54,12 @@ class Airplane:
         if self.state == AirplaneState.LANDED:
             return
         
-        # Consommation de carburant
         self.fuel = max(0, self.fuel - self.FUEL_CONSUMPTION_RATE * dt)
         
-        # Vérifier le niveau de carburant critique
         if self.fuel <= self.CRITICAL_FUEL_LEVEL and not self.has_emergency:
             self.has_emergency = True
             self.state = AirplaneState.EMERGENCY
         
-        # Si plus de carburant, crash
         if self.fuel <= 0:
             self.state = AirplaneState.LANDED
             return
@@ -71,25 +68,20 @@ class Airplane:
         if self.state != AirplaneState.HOLDING:
             # Si en mode atterrissage, se diriger vers la zone
             if self.state == AirplaneState.LANDING and self.landing_target_x is not None:
-                # Calculer le cap vers la zone d'atterrissage
                 dx = self.landing_target_x - self.x
                 dy = self.landing_target_y - self.y
                 
-                # Calculer l'angle vers la cible
                 target_heading = math.degrees(math.atan2(dx, -dy)) % 360
                 
-                # Ajuster progressivement le cap (virage doux)
                 heading_diff = (target_heading - self.heading + 180) % 360 - 180
-                turn_rate = 2.0  # Degrés par frame
+                turn_rate = 2.0
                 if abs(heading_diff) > turn_rate:
                     self.heading += turn_rate if heading_diff > 0 else -turn_rate
                 else:
                     self.heading = target_heading
                 self.heading = self.heading % 360
             
-            # Conversion du cap en radians
             heading_rad = math.radians(self.heading)
-            # Déplacement selon le cap
             self.x += math.sin(heading_rad) * self.speed * dt * 0.1
             self.y -= math.cos(heading_rad) * self.speed * dt * 0.1
     
@@ -108,12 +100,10 @@ class Airplane:
     def land(self, landing_x=None, landing_y=None):
         if self.level == self.LEVEL_1:
             if self.state == AirplaneState.LANDING:
-                # Annuler l'atterrissage
                 self.state = AirplaneState.FLYING
                 self.landing_target_x = None
                 self.landing_target_y = None
             else:
-                # Commencer l'atterrissage
                 self.state = AirplaneState.LANDING
                 self.landing_target_x = landing_x
                 self.landing_target_y = landing_y
@@ -122,7 +112,6 @@ class Airplane:
     
     def hold(self):
         if self.state == AirplaneState.HOLDING:
-            # Annuler l'attente
             self.state = AirplaneState.FLYING
         else:
             # Mettre en attente
