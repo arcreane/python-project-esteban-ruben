@@ -1,6 +1,3 @@
-"""
-Vue radar pour afficher les avions dans l'espace aérien.
-"""
 from PySide6.QtWidgets import QGraphicsScene, QGraphicsEllipseItem, QGraphicsTextItem, QGraphicsPolygonItem
 from PySide6.QtCore import Qt, QPointF
 from PySide6.QtGui import QPen, QBrush, QColor, QPolygonF, QFont
@@ -9,7 +6,6 @@ import math
 
 
 class AirplaneGraphicsItem(QGraphicsPolygonItem):
-    """Représentation graphique d'un avion"""
     
     def __init__(self, airplane, game_manager):
         super().__init__()
@@ -49,7 +45,6 @@ class AirplaneGraphicsItem(QGraphicsPolygonItem):
         self.setAcceptHoverEvents(True)
     
     def update_appearance(self):
-        """Met à jour l'apparence selon l'état de l'avion"""
         airplane = self.airplane
         
         # Recréer la forme si nécessaire (pour changer la taille selon le niveau)
@@ -93,18 +88,15 @@ class AirplaneGraphicsItem(QGraphicsPolygonItem):
         self.setRotation(airplane.heading)
     
     def hoverEnterEvent(self, event):
-        """Affiche un effet au survol"""
         self.setPen(QPen(QColor(255, 255, 0), 3))  # Jaune épais
         super().hoverEnterEvent(event)
     
     def hoverLeaveEvent(self, event):
-        """Retire l'effet au survol"""
         self.setPen(QPen(QColor(255, 255, 255), 2))  # Blanc normal
         super().hoverLeaveEvent(event)
 
 
 class RadarScene(QGraphicsScene):
-    """Scène graphique représentant le radar"""
     
     def __init__(self, width, height, game_manager):
         super().__init__(0, 0, width, height)
@@ -122,7 +114,6 @@ class RadarScene(QGraphicsScene):
         self.draw_distance_circles()
     
     def draw_landing_zone(self):
-        """Dessine la zone d'atterrissage"""
         x = self.game_manager.landing_zone_x
         y = self.game_manager.landing_zone_y
         radius = self.game_manager.landing_zone_radius
@@ -154,7 +145,6 @@ class RadarScene(QGraphicsScene):
         self.addItem(text)
     
     def draw_distance_circles(self):
-        """Dessine les cercles de distance sur le radar"""
         center_x = self.width() / 2
         center_y = self.height() / 2
         
@@ -171,7 +161,6 @@ class RadarScene(QGraphicsScene):
             self.addItem(circle)
     
     def update_airplanes(self):
-        """Met à jour l'affichage de tous les avions"""
         current_ids = set()
         
         # Mettre à jour ou créer les items graphiques

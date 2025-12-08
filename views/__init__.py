@@ -1,6 +1,3 @@
-"""
-Module d'initialisation du package views.
-"""
 from views.main_window import MainWindow
 from views.radar_view import RadarScene
 

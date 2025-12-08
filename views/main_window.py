@@ -1,6 +1,3 @@
-"""
-Fenêtre principale de l'application de contrôle aérien.
-"""
 import os
 from PySide6.QtWidgets import QMainWindow, QMessageBox
 from PySide6.QtCore import QTimer, QTime, QEvent, Qt
@@ -12,7 +9,6 @@ from views.radar_view import RadarScene
 
 
 class MainWindow(QMainWindow):
-    """Fenêtre principale de l'application"""
     
     def __init__(self):
         super().__init__()
@@ -47,7 +43,6 @@ class MainWindow(QMainWindow):
         self.update_ui()
     
     def load_ui(self):
-        """Charge l'interface depuis le fichier .ui"""
         ui_file_path = os.path.join(os.path.dirname(__file__), '..', 'ui', 'mainwindow.ui')
         ui_file = QFile(ui_file_path)
         
@@ -103,14 +98,12 @@ QSplitter::handle {
 """)
     
     def connect_signals(self):
-        """Connecte les signaux des boutons"""
         self.ui.button_climb.clicked.connect(self.on_climb)
         self.ui.button_descend.clicked.connect(self.on_descend)
         self.ui.button_land.clicked.connect(self.on_land)
         self.ui.button_hold.clicked.connect(self.on_hold)
     
     def eventFilter(self, obj, event):
-        """Filtre les événements pour capturer les clics sur le radar"""
         if obj == self.ui.graphicsView.viewport() and event.type() == QEvent.MouseButtonPress:
             if event.button() == Qt.LeftButton:
                 # Convertir les coordonnées de la vue en coordonnées de la scène
@@ -140,7 +133,6 @@ QSplitter::handle {
         self.radar_scene.update_airplanes()
     
     def update_game(self):
-        """Mise à jour du jeu (appelé par le timer)"""
         dt = 0.05  # 50ms
         
         if not self.game_manager.game_over:
@@ -156,12 +148,10 @@ QSplitter::handle {
                 self.show_game_over()
     
     def update_ui(self):
-        """Met à jour tous les éléments de l'interface"""
         self.update_stats()
         self.update_selected_airplane_info()
     
     def update_stats(self):
-        """Met à jour les statistiques du jeu"""
         stats = self.game_manager.get_stats()
         
         # Score
@@ -188,7 +178,6 @@ QSplitter::handle {
             self.ui.statusbar.showMessage(status_text)
     
     def update_selected_airplane_info(self):
-        """Met à jour les informations de l'avion sélectionné"""
         airplane = self.game_manager.selected_airplane
         
         if airplane:
@@ -269,7 +258,6 @@ QSplitter::handle {
             self.ui.button_hold.setText("Attendre (Hold)")
     
     def on_climb(self):
-        """Action: faire monter l'avion"""
         if self.game_manager.selected_airplane:
             old_level = self.game_manager.selected_airplane.level
             self.game_manager.selected_airplane.climb()
@@ -280,7 +268,6 @@ QSplitter::handle {
                 print(f"⚠️ {self.game_manager.selected_airplane.name} - Déjà au niveau maximum")
     
     def on_descend(self):
-        """Action: faire descendre l'avion"""
         if self.game_manager.selected_airplane:
             old_level = self.game_manager.selected_airplane.level
             self.game_manager.selected_airplane.descend()
@@ -291,7 +278,6 @@ QSplitter::handle {
                 print(f"⚠️ {self.game_manager.selected_airplane.name} - Déjà au niveau minimum")
     
     def on_land(self):
-        """Action: faire atterrir l'avion"""
         if self.game_manager.selected_airplane:
             airplane = self.game_manager.selected_airplane
             
@@ -311,7 +297,6 @@ QSplitter::handle {
                     print(f"❌ {airplane.name} - Atterrissage impossible! Doit être au niveau 1")
     
     def on_hold(self):
-        """Action: mettre l'avion en attente"""
         if self.game_manager.selected_airplane:
             airplane = self.game_manager.selected_airplane
             
@@ -323,7 +308,6 @@ QSplitter::handle {
                 print(f"⏸️ {airplane.name} - Mis en attente")
     
     def show_collision_warning(self):
-        """Affiche un avertissement de collision"""
         msg_box = QMessageBox(self)
         msg_box.setIcon(QMessageBox.Critical)
         msg_box.setWindowTitle("💥 COLLISION!")
@@ -341,7 +325,6 @@ QSplitter::handle {
         QTimer.singleShot(2000, msg_box.close)
     
     def show_game_over(self):
-        """Affiche le message de fin de partie"""
         stats = self.game_manager.get_stats()
         
         # Calculer le temps de survie
@@ -410,7 +393,6 @@ QSplitter::handle {
             self.close()
     
     def restart_game(self):
-        """Redémarre une nouvelle partie"""
         self.game_manager.reset()
         
         # Nettoyer complètement la scène

@@ -1,21 +1,10 @@
-"""
-Module contenant la classe GameManager pour gérer la logique du jeu.
-"""
 import random
 from models.airplane import Airplane, AirplaneState
 
 
 class GameManager:
-    """Gestionnaire principal du jeu de contrôle aérien"""
     
     def __init__(self, radar_width=800, radar_height=600):
-        """
-        Initialise le gestionnaire de jeu.
-        
-        Args:
-            radar_width: Largeur de la zone radar
-            radar_height: Hauteur de la zone radar
-        """
         self.radar_width = radar_width
         self.radar_height = radar_height
         self.airplanes = []
@@ -42,12 +31,6 @@ class GameManager:
         self.landing_zone_radius = 80
         
     def update(self, dt):
-        """
-        Met à jour l'état du jeu.
-        
-        Args:
-            dt: Delta time en secondes
-        """
         if self.game_over:
             return
         
@@ -168,20 +151,17 @@ class GameManager:
         self.airplanes.append(airplane)
     
     def _is_in_landing_zone(self, airplane):
-        """Vérifie si un avion est dans la zone d'atterrissage"""
         dx = airplane.x - self.landing_zone_x
         dy = airplane.y - self.landing_zone_y
         distance = (dx*dx + dy*dy) ** 0.5
         return distance <= self.landing_zone_radius
     
     def _is_out_of_bounds(self, airplane):
-        """Vérifie si un avion est sorti de la zone radar"""
         margin = 50
         return (airplane.x < -margin or airplane.x > self.radar_width + margin or
                 airplane.y < -margin or airplane.y > self.radar_height + margin)
     
     def _bounce_airplane(self, airplane):
-        """Fait rebondir un avion qui sort de la zone en le redirigeant vers le centre"""
         import math
         margin = 50
         
@@ -214,7 +194,6 @@ class GameManager:
             airplane.landing_target_y = None
     
     def _check_collisions(self):
-        """Détecte les collisions entre avions"""
         collided_pairs = []
         
         for i, airplane1 in enumerate(self.airplanes):
@@ -228,7 +207,6 @@ class GameManager:
             break  # Une seule collision par frame pour éviter les problèmes
     
     def handle_landing(self, airplane):
-        """Gère l'atterrissage réussi d'un avion"""
         self.airplanes.remove(airplane)
         self.planes_landed += 1
         
@@ -248,8 +226,7 @@ class GameManager:
             self.selected_airplane = None
     
     def handle_crash(self, airplane):
-        """Gère le crash d'un avion (manque de carburant)"""
-        print(f"⛽ CRASH CARBURANT! {airplane.name} est tombé en panne de carburant!")
+        print(f"\u2b62 CRASH CARBURANT! {airplane.name} est tomb\u00e9 en panne de carburant!")
         self.airplanes.remove(airplane)
         self.lives -= 1
         self.score = max(0, self.score - 150)
