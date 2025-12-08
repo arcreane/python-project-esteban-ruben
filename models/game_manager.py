@@ -182,8 +182,7 @@ class GameManager:
             for airplane2 in self.airplanes[i+1:]:
                 if airplane1.is_too_close(airplane2):
                     collided_pairs.append((airplane1, airplane2))
-        
-        # Traiter toutes les collisions détectées
+
         for airplane1, airplane2 in collided_pairs:
             self.handle_collision(airplane1, airplane2)
             break  # Une seule collision par frame pour éviter les problèmes
@@ -191,8 +190,7 @@ class GameManager:
     def handle_landing(self, airplane):
         self.airplanes.remove(airplane)
         self.planes_landed += 1
-        
-        # Calcul du score basé sur le carburant restant
+
         base_score = 100
         fuel_bonus = int(airplane.fuel * 2)  # Bonus pour carburant économisé
         
