@@ -9,23 +9,23 @@ class GameManager:
         self.radar_height = radar_height
         self.airplanes = []
         self.score = 0
-        self.best_score = 0  # Meilleur score
+        self.best_score = 0  
         self.lives = 3
         self.planes_landed = 0
         self.collisions_avoided = 0
         self.game_time = 0
         self.difficulty_level = 1
-        self.spawn_timer = 8  # Commencer avec un timer déjà avancé
-        self.spawn_interval = 5  # Secondes entre chaque spawn (réduit)
+        self.spawn_timer = 8  
+        self.spawn_interval = 5  
         self.game_over = False
         self.selected_airplane = None
-        self.collision_positions = []  # Stocker les positions des collisions pour animation
+        self.collision_positions = []  
         
-        # Spawn initial d'avions (8 pour commencer)
+        
         for _ in range(8):
             self.spawn_airplane()
         
-        # Zone d'atterrissage (au centre en bas)
+        
         self.landing_zone_x = radar_width / 2
         self.landing_zone_y = radar_height - 50
         self.landing_zone_radius = 80
@@ -37,115 +37,100 @@ class GameManager:
         self.game_time += dt
         self.spawn_timer += dt
         
-        # Augmenter la difficulté avec le temps
-        new_difficulty = 1 + int(self.game_time / 30)  # +1 niveau toutes les 30 secondes (encore plus rapide)
+        
+        new_difficulty = 1 + int(self.game_time / 30)  
         if new_difficulty > self.difficulty_level:
             self.difficulty_level = new_difficulty
-            self.spawn_interval = max(2.5, 7 - self.difficulty_level * 0.7)  # Plus difficile = spawn beaucoup plus rapide
+            self.spawn_interval = max(2.5, 7 - self.difficulty_level * 0.7)  
         
-        # Spawn de nouveaux avions
+        
         if self.spawn_timer >= self.spawn_interval:
             self.spawn_airplane()
             self.spawn_timer = 0
         
-        # Mise à jour de tous les avions
-        for airplane in self.airplanes[:]:  # Copie pour modification safe
+        for airplane in self.airplanes[:]:
             airplane.update(dt)
             
-            # Vérifier si l'avion a crashé (plus de carburant)
             if airplane.fuel <= 0:
                 self.handle_crash(airplane)
                 continue
             
-            # Vérifier si l'avion est dans la zone d'atterrissage
             if airplane.state == AirplaneState.LANDING:
                 in_zone = self._is_in_landing_zone(airplane)
                 at_level_1 = (airplane.level == 1)
                 
                 print(f"🛬 {airplane.name} en approche - Dans zone: {in_zone}, Niveau 1: {at_level_1}")
                 
-                # Vérifier que l'avion est bien au niveau 1 ET dans la zone
                 if in_zone and at_level_1:
                     self.handle_landing(airplane)
                     continue
                 elif not in_zone and not at_level_1:
-                    # Si plus au niveau 1, annuler l'atterrissage
                     airplane.state = AirplaneState.FLYING
                     airplane.landing_target_x = None
                     airplane.landing_target_y = None
             
-            # Vérifier si l'avion est sorti de la zone (ricochet)
             if self._is_out_of_bounds(airplane):
                 self._bounce_airplane(airplane)
                 continue
         
-        # Détection de collisions
         self._check_collisions()
         
-        # Mettre à jour les animations d'explosion
         self.collision_positions = [
             {'x': pos['x'], 'y': pos['y'], 'timer': pos['timer'] - dt}
             for pos in self.collision_positions
             if pos['timer'] > 0
         ]
         
-        # Vérifier game over
         if self.lives <= 0:
             self.game_over = True
     
     def spawn_airplane(self):
         """Fait apparaître un nouvel avion"""
-        max_attempts = 10  # Nombre maximum de tentatives pour éviter les collisions
+        max_attempts = 10
         
         for attempt in range(max_attempts):
-            # Position aléatoire plus près du centre (sur un cercle autour du radar)
-            edge = random.randint(0, 3)  # 0=haut, 1=droite, 2=bas, 3=gauche
-            margin = 100  # Distance du bord
+            edge = random.randint(0, 3)
+            margin = 100
             
-            if edge == 0:  # Haut
+            if edge == 0:
                 x = random.uniform(margin, self.radar_width - margin)
                 y = margin
-                heading = random.uniform(135, 225)  # Vers le bas
-            elif edge == 1:  # Droite
+                heading = random.uniform(135, 225)
+            elif edge == 1:
                 x = self.radar_width - margin
                 y = random.uniform(margin, self.radar_height - margin)
-                heading = random.uniform(225, 315)  # Vers la gauche
-            elif edge == 2:  # Bas
+                heading = random.uniform(225, 315)
+            elif edge == 2:
                 x = random.uniform(margin, self.radar_width - margin)
                 y = self.radar_height - margin
-                heading = random.uniform(315, 405) % 360  # Vers le haut
-            else:  # Gauche
+                heading = random.uniform(315, 405) % 360
+            else:
                 x = margin
                 y = random.uniform(margin, self.radar_height - margin)
-                heading = random.uniform(45, 135)  # Vers la droite
+                heading = random.uniform(45, 135)
             
-            level = random.randint(1, 3)  # Niveau aléatoire 1, 2 ou 3
+            level = random.randint(1, 3)
             speed = random.randint(200, 400)
             fuel = random.randint(60, 100)
             
-            # Événement aléatoire: avion en urgence
-            if random.random() < 0.1 * self.difficulty_level / 10:  # Probabilité augmente avec difficulté
+            if random.random() < 0.1 * self.difficulty_level / 10:
                 fuel = random.randint(5, 20)
             
-            # Créer un avion temporaire pour vérifier les collisions
             temp_airplane = Airplane(x=x, y=y, level=level, speed=speed, 
                               heading=heading, fuel=fuel)
             
-            # Vérifier si trop proche d'autres avions
             too_close = False
             for existing in self.airplanes:
                 if existing.level == temp_airplane.level:
                     distance = temp_airplane.distance_to(existing)
-                    if distance < 150:  # Distance minimale au spawn (plus grande que collision)
+                    if distance < 150:
                         too_close = True
                         break
             
-            # Si pas trop proche, ajouter l'avion
             if not too_close:
                 self.airplanes.append(temp_airplane)
                 return
         
-        # Si après 10 tentatives on n'a pas trouvé de place, ajouter quand même (rare)
         airplane = Airplane(x=x, y=y, level=level, speed=speed, 
                           heading=heading, fuel=fuel)
         self.airplanes.append(airplane)
@@ -163,31 +148,28 @@ class GameManager:
     
     def _bounce_airplane(self, airplane):
         import math
+
         margin = 50
-        
-        # Replacer l'avion dans les limites
+
         if airplane.x < -margin:
             airplane.x = -margin + 10
         elif airplane.x > self.radar_width + margin:
             airplane.x = self.radar_width + margin - 10
-        
+
         if airplane.y < -margin:
             airplane.y = -margin + 10
         elif airplane.y > self.radar_height + margin:
             airplane.y = self.radar_height + margin - 10
-        
-        # Calculer la direction vers le centre du radar
+
         center_x = self.radar_width / 2
         center_y = self.radar_height / 2
-        
+
         dx = center_x - airplane.x
         dy = center_y - airplane.y
-        
-        # Calculer le nouveau cap vers le centre
+
         new_heading = math.degrees(math.atan2(dx, -dy)) % 360
         airplane.heading = new_heading
-        
-        # Annuler l'atterrissage si en cours
+
         if airplane.state == AirplaneState.LANDING:
             airplane.state = AirplaneState.FLYING
             airplane.landing_target_x = None

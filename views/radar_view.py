@@ -11,12 +11,9 @@ class AirplaneGraphicsItem(QGraphicsPolygonItem):
         super().__init__()
         self.airplane = airplane
         self.game_manager = game_manager
-        self.setZValue(10)  # Au-dessus des autres éléments
-        
-        # Créer la forme de l'avion (triangle pointant vers le haut)
+        self.setZValue(10)
         self.create_airplane_shape()
         
-        # Label pour afficher les infos
         self.label = QGraphicsTextItem(self)
         self.label.setDefaultTextColor(QColor(255, 255, 255))
         self.label.setPos(-20, -30)
@@ -25,32 +22,25 @@ class AirplaneGraphicsItem(QGraphicsPolygonItem):
     
     def create_airplane_shape(self):
         """Crée la forme de l'avion (triangle) avec taille selon le niveau"""
-        # Taille selon le niveau: 1=petit, 2=moyen, 3=grand
-        size_multiplier = self.airplane.level * 0.5  # 0.5, 1.0, 1.5
+        size_multiplier = self.airplane.level * 0.5
         
-        # Triangle pointant vers le haut, taille variable
         base_size = 10
         height = base_size * size_multiplier
         width = 7 * size_multiplier
         
         triangle = QPolygonF([
-            QPointF(0, -height),      # Pointe avant
-            QPointF(-width, height),  # Coin arrière gauche
-            QPointF(width, height)    # Coin arrière droit
+            QPointF(0, -height),
+            QPointF(-width, height),
+            QPointF(width, height)
         ])
         self.setPolygon(triangle)
-        
-        # Rendre l'avion cliquable
         self.setFlag(QGraphicsPolygonItem.ItemIsSelectable, True)
         self.setAcceptHoverEvents(True)
     
     def update_appearance(self):
         airplane = self.airplane
-        
-        # Recréer la forme si nécessaire (pour changer la taille selon le niveau)
         self.create_airplane_shape()
         
-        # Vérifier si proche d'un autre avion (danger)
         is_in_danger_zone = False
         if self.game_manager:
             for other in self.game_manager.airplanes:
@@ -58,11 +48,10 @@ class AirplaneGraphicsItem(QGraphicsPolygonItem):
                     is_in_danger_zone = True
                     break
         
-        # Couleur selon l'état
         if airplane.is_in_danger():
             color = QColor(244, 67, 54)  # Rouge (urgence carburant)
         elif is_in_danger_zone:
-            color = QColor(255, 87, 34)  # Orange foncé (danger collision)
+            color = QColor(255, 87, 34)
         elif airplane.state == AirplaneState.LANDING:
             color = QColor(255, 152, 0)  # Orange (atterrissage)
         elif airplane.state == AirplaneState.HOLDING:
@@ -74,25 +63,21 @@ class AirplaneGraphicsItem(QGraphicsPolygonItem):
         
         self.setBrush(QBrush(color))
         
-        # Bordure rouge épaisse si danger de collision
         if is_in_danger_zone and not airplane.selected:
             self.setPen(QPen(QColor(244, 67, 54), 3))
         else:
             self.setPen(QPen(QColor(255, 255, 255), 2))
         
-        # Mettre à jour le label avec le niveau
         self.label.setPlainText(f"{airplane.name}\nN{airplane.level}")
-        
-        # Position et rotation
         self.setPos(airplane.x, airplane.y)
         self.setRotation(airplane.heading)
     
     def hoverEnterEvent(self, event):
-        self.setPen(QPen(QColor(255, 255, 0), 3))  # Jaune épais
+        self.setPen(QPen(QColor(255, 255, 0), 3))
         super().hoverEnterEvent(event)
     
     def hoverLeaveEvent(self, event):
-        self.setPen(QPen(QColor(255, 255, 255), 2))  # Blanc normal
+        self.setPen(QPen(QColor(255, 255, 255), 2))
         super().hoverLeaveEvent(event)
 
 
@@ -101,16 +86,11 @@ class RadarScene(QGraphicsScene):
     def __init__(self, width, height, game_manager):
         super().__init__(0, 0, width, height)
         self.game_manager = game_manager
-        self.airplane_items = {}  # Dict: airplane.id -> AirplaneGraphicsItem
-        self.explosion_items = []  # Items graphiques des explosions
+        self.airplane_items = {}
+        self.explosion_items = []
         
-        # Fond sombre
         self.setBackgroundBrush(QBrush(QColor(30, 30, 30)))
-        
-        # Dessiner la zone d'atterrissage
         self.draw_landing_zone()
-        
-        # Dessiner les cercles de distance
         self.draw_distance_circles()
     
     def draw_landing_zone(self):
@@ -123,7 +103,7 @@ class RadarScene(QGraphicsScene):
             x - radius, y - radius, 
             radius * 2, radius * 2
         )
-        landing_circle.setPen(QPen(QColor(76, 175, 80), 3))  # Vert
+        landing_circle.setPen(QPen(QColor(76, 175, 80), 3))
         landing_circle.setBrush(QBrush(QColor(76, 175, 80, 50)))
         landing_circle.setZValue(1)
         self.addItem(landing_circle)
@@ -137,7 +117,6 @@ class RadarScene(QGraphicsScene):
         line1.setZValue(2)
         line2.setZValue(2)
         
-        # Texte "LANDING ZONE"
         text = QGraphicsTextItem("LANDING ZONE")
         text.setDefaultTextColor(QColor(255, 255, 255))
         text.setPos(x - 50, y + radius + 5)
@@ -148,7 +127,6 @@ class RadarScene(QGraphicsScene):
         center_x = self.width() / 2
         center_y = self.height() / 2
         
-        # Dessiner 3 cercles concentriques
         for i in range(1, 4):
             radius = min(self.width(), self.height()) / 2 * i / 3
             circle = QGraphicsEllipseItem(
@@ -163,18 +141,15 @@ class RadarScene(QGraphicsScene):
     def update_airplanes(self):
         current_ids = set()
         
-        # Mettre à jour ou créer les items graphiques
         for airplane in self.game_manager.airplanes:
             current_ids.add(airplane.id)
             
             if airplane.id not in self.airplane_items:
-                # Créer un nouvel item graphique
                 item = AirplaneGraphicsItem(airplane, self.game_manager)
                 self.airplane_items[airplane.id] = item
                 self.addItem(item)
                 self.addItem(item.label)
             else:
-                # Mettre à jour l'item existant
                 item = self.airplane_items[airplane.id]
                 item.update_appearance()
         
@@ -189,42 +164,36 @@ class RadarScene(QGraphicsScene):
         for airplane_id in to_remove:
             del self.airplane_items[airplane_id]
         
-        # Mettre à jour les explosions
         self.update_explosions()
     
     def update_explosions(self):
         """Met à jour l'affichage des explosions"""
-        # Supprimer les anciennes explosions
         for item in self.explosion_items:
-            if item.scene() == self:  # Vérifier que l'item est encore dans la scène
+            if item.scene() == self:
                 self.removeItem(item)
         self.explosion_items.clear()
         
-        # Créer les nouvelles explosions
         for collision in self.game_manager.collision_positions:
             x = collision['x']
             y = collision['y']
             timer = collision['timer']
             
-            # Taille de l'explosion (grandit puis rétrécit)
             if timer > 0.5:
-                size = (1.0 - timer) * 100  # Grandit
+                size = (1.0 - timer) * 100
             else:
-                size = timer * 100  # Rétrécit
+                size = timer * 100
             
-            # Cercle rouge pour l'explosion
             explosion_circle = QGraphicsEllipseItem(
                 x - size/2, y - size/2, size, size
             )
-            color = QColor(255, 69, 0)  # Orange-rouge
-            color.setAlpha(int(timer * 255))  # Transparence selon le timer
+            color = QColor(255, 69, 0)
+            color.setAlpha(int(timer * 255))
             explosion_circle.setBrush(QBrush(color))
             explosion_circle.setPen(QPen(QColor(255, 165, 0), 3))
             explosion_circle.setZValue(20)
             self.addItem(explosion_circle)
             self.explosion_items.append(explosion_circle)
             
-            # Texte "BOOM!"
             if timer > 0.7:
                 boom_text = QGraphicsTextItem("💥")
                 boom_text.setDefaultTextColor(QColor(255, 255, 0))
@@ -237,10 +206,8 @@ class RadarScene(QGraphicsScene):
     
     def get_airplane_at_pos(self, x, y):
         """Trouve l'avion à une position donnée"""
-        # Sélectionner l'avion dans le game manager
         selected = self.game_manager.select_airplane(x, y)
         
-        # Afficher un message dans la console pour debug
         if selected:
             print(f"✈️ Avion sélectionné: {selected.name} - Niveau: {selected.level}, Fuel: {int(selected.fuel)}%")
         
